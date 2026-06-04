@@ -1,0 +1,6 @@
+{
+  "name": "AgroSense",
+  "description": "Aplicación local para la gestión de chacras, drones, economía, topografía y clima con soporte de IA.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
