@@ -30,7 +30,6 @@ object AsistenteIA {
     private const val MODELO = "gemini-3.5-flash"
 
     // Configuración para OpenRouter
-    private const val OPENROUTER_API_KEY = "YOUR_OPENROUTER_API_KEY"
     private const val OPENROUTER_MODELO = "google/gemini-2.5-flash"
     private const val OPENROUTER_URL = "https://openrouter.ai/api/v1/chat/completions"
 
@@ -270,10 +269,18 @@ object AsistenteIA {
                 put("temperature", 0.3)
             }
 
+            val openRouterApiKey = if (BuildConfig.OPENROUTER_API_KEY.isNotEmpty() &&
+                BuildConfig.OPENROUTER_API_KEY != "YOUR_OPENROUTER_API_KEY") {
+                BuildConfig.OPENROUTER_API_KEY
+            } else {
+                return@withContext "Clave de OpenRouter no configurada. Generando analisis local:\n\n" +
+                        generarAsesoriaLocalDemostrativa(climas, finanzas, telemetrias)
+            }
+
             val body = jsonRequest.toString().toRequestBody("application/json; charset=utf-8".toMediaType())
             val request = Request.Builder()
                 .url(OPENROUTER_URL)
-                .addHeader("Authorization", "Bearer $OPENROUTER_API_KEY")
+                .addHeader("Authorization", "Bearer $openRouterApiKey")
                 .addHeader("Content-Type", "application/json")
                 .addHeader("HTTP-Referer", "https://ai.studio/build")
                 .addHeader("X-Title", "Asistente Agrícola Satelital Inteligente")
